@@ -81,3 +81,39 @@ int fd_udp_socket_open( uint16_t port ) {
 
 	return server_socket;
 }
+
+/**
+ * Connect to UDP socket
+ */
+#include <arpa/inet.h>
+#include <stdlib.h>
+
+struct udp_client_socket_t {
+	int                client_socket;
+	struct sockaddr_in client_addr;
+	socklen_t          client_length;
+};
+
+void *fd_udp_socket_connect( const char *ip, uint16_t port ) {
+	int                         ret;
+	struct udp_client_socket_t *udp_client_socket;
+	struct in_addr              server_address;
+
+	udp_client_socket = calloc( 1, sizeof( struct udp_client_socket_t ) );
+	assert( udp_client_socket != NULL && "ERROR: Can't allocate memory!" );
+
+	ret = inet_aton( ip, &server_address );
+	assert( ret != 0 && "ERROR: Can't parse ip address!" );
+
+	udp_client_socket->client_addr.sin_family = AF_INET;
+	udp_client_socket->client_addr.sin_port = htons( port );
+	udp_client_socket->client_addr.sin_addr.s_addr = server_address.s_addr;
+	udp_client_socket->client_length =
+	    sizeof( udp_client_socket->client_addr );
+
+	udp_client_socket->client_socket =
+	    socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
+	assert( udp_client_socket->client_socket != -1 && "ERROR: Can't open socket!" );
+
+	return udp_client_socket;
+}
