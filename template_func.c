@@ -25,3 +25,33 @@ int fd_tcp_socket_open( uint16_t port ) {
 
 	return server_socket;
 }
+
+/**
+ * Connect to TCP socket
+ */
+#include <arpa/inet.h>
+
+int fd_tcp_socket_connect( const char *ip, uint16_t port ) {
+	int                ret;
+	int                client_socket;
+	struct sockaddr_in client_addr = {0};
+	socklen_t          client_length;
+	struct in_addr     server_address;
+
+	ret = inet_aton( ip, &server_address );
+	assert( ret != 0 && "ERROR: Can't parse ip address!" );
+
+	client_addr.sin_family = AF_INET;
+	client_addr.sin_port = htons( port );
+	client_addr.sin_addr.s_addr = server_address.s_addr;
+	client_length = sizeof( client_addr );
+
+	client_socket = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP );
+	assert( client_socket != -1 && "ERROR: Can't open socket!" );
+
+	ret = connect( client_socket, (struct sockaddr *)&client_addr,
+	               client_length );
+	assert( ret != -1 && "ERROR: Can't connect to server!" );
+
+	return client_socket;
+}
