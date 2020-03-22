@@ -72,6 +72,9 @@ struct server_struct_t {
 };
 
 /*
+#include <unistd.h>
+#include <stdlib.h>
+
 void *handler_example( void *arg ) {
 	int *client_socket = (int *)arg;
 
