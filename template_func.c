@@ -132,6 +132,23 @@ fd_tcp_server_register_handler( int server_socket,
 }
 
 /**
+ * Unregister TCP packet handler
+ */
+#include <pthread.h>
+
+void fd_tcp_server_unregister_handler( pthread_t server_thread ) {
+	int   ret;
+	void *res;
+
+	ret = pthread_cancel( server_thread );
+	assert( ret == 0 && "ERROR: Can't cancel pthread!" );
+
+	ret = pthread_join( server_thread, &res );
+	assert( ret == 0 && "ERROR: Can't join to pthread!" );
+	assert( res == PTHREAD_CANCELED && "ERROR: Thread was not canceled!" );
+}
+
+/**
  * Open UDP socket
  */
 #include <arpa/inet.h>
