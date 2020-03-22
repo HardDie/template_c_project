@@ -23,6 +23,9 @@ int fd_tcp_server_open( uint16_t port ) {
 	            server_length );
 	assert( ret != -1 && "ERROR: Can't bind socket!" );
 
+	ret = listen( server_socket, 0 );
+	assert( ret != -1 && "ERROR: Can't start listen port!" );
+
 	return server_socket;
 }
 
