@@ -21,7 +21,8 @@ CFLAGS += -g
 CFLAGS += -fsanitize=address
 CFLAGS += -fno-omit-frame-pointer
 
-LDFLAGS = -pthread
+LDFLAGS =
+LDFLAGS += -pthread
 
 SRC ?= $(wildcard *.${EXT})
 OBJ ?= $(SRC:%.${EXT}=${BINPATH}/%.o)
