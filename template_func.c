@@ -76,11 +76,11 @@ struct server_struct_t {
 #include <stdlib.h>
 
 void *handler_example( void *arg ) {
-	int *client_socket = (int *)arg;
+        int *client_socket = (int *)arg;
 
-	close( *client_socket );
-	free( client_socket );
-	pthread_exit( NULL );
+        close( *client_socket );
+        free( client_socket );
+        pthread_exit( NULL );
 }
 */
 
@@ -181,33 +181,12 @@ int fd_udp_server_open( uint16_t port ) {
  * Connect to UDP socket
  */
 #include <arpa/inet.h>
-#include <stdlib.h>
 
-struct udp_client_t {
-	int                client_socket;
-	struct sockaddr_in client_addr;
-	socklen_t          client_length;
-};
+int fd_udp_client_open( void ) {
+	int client_socket;
 
-void *fd_udp_client_open( const char *ip, uint16_t port ) {
-	int                  ret;
-	struct udp_client_t *udp_client;
-	struct in_addr       server_address;
+	client_socket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
+	assert( client_socket != -1 && "ERROR: Can't open socket!" );
 
-	udp_client = calloc( 1, sizeof( struct udp_client_t ) );
-	assert( udp_client != NULL && "ERROR: Can't allocate memory!" );
-
-	ret = inet_aton( ip, &server_address );
-	assert( ret != 0 && "ERROR: Can't parse ip address!" );
-
-	udp_client->client_addr.sin_family = AF_INET;
-	udp_client->client_addr.sin_port = htons( port );
-	udp_client->client_addr.sin_addr.s_addr = server_address.s_addr;
-	udp_client->client_length = sizeof( udp_client->client_addr );
-
-	udp_client->client_socket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
-	assert( udp_client->client_socket != -1 &&
-	        "ERROR: Can't open socket!" );
-
-	return udp_client;
+	return client_socket;
 }
