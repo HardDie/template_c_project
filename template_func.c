@@ -60,6 +60,78 @@ int fd_tcp_client_open( const char *ip, uint16_t port ) {
 }
 
 /**
+ * Register TCP packet handler
+ */
+#include <arpa/inet.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+struct server_struct_t {
+	int server_socket;
+	void *( *handler )( void *client_socket );
+};
+
+/*
+void *handler_example( void *arg ) {
+	int *client_socket = (int *)arg;
+
+	close( *client_socket );
+	free( client_socket );
+	pthread_exit( NULL );
+}
+*/
+
+static void *server_thread_loop( void *arg ) {
+	int                     ret;
+	struct server_struct_t *server_struct = (struct server_struct_t *)arg;
+	int                     client_socket;
+	struct sockaddr_in      client_addr = {0};
+	socklen_t               client_length;
+
+	while ( 1 ) {
+		pthread_t client_thread = {0};
+
+		client_socket =
+		    accept( server_struct->server_socket,
+		            (struct sockaddr *)&client_addr, &client_length );
+		assert( client_socket != -1 &&
+		        "ERROR: Can't accept connection!" );
+
+		int *tmp = calloc( 1, sizeof( int ) );
+		assert( tmp != NULL && "EROR: Can't allocate memory!" );
+		*tmp = client_socket;
+
+		ret = pthread_create( &client_thread, NULL,
+		                      server_struct->handler, (void *)tmp );
+		assert( ret == 0 && "ERROR: Can't start accept thread!" );
+	}
+
+	// TODO: How to free after pthread_cancel() ???
+	free( server_struct );
+	pthread_exit( NULL );
+}
+
+pthread_t
+fd_tcp_server_register_handler( int server_socket,
+                                void *( *handler )( void *client_socket ) ) {
+	int                     ret;
+	pthread_t               server_thread;
+	struct server_struct_t *server_struct;
+
+	server_struct = calloc( 1, sizeof( struct server_struct_t ) );
+	assert( server_struct != NULL && "ERROR: Can't allocate memory!" );
+
+	server_struct->server_socket = server_socket;
+	server_struct->handler = handler;
+
+	ret = pthread_create( &server_thread, NULL, server_thread_loop,
+	                      (void *)server_struct );
+	assert( ret == 0 && "ERROR: Can't start loop thread!" );
+
+	return server_thread;
+}
+
+/**
  * Open UDP socket
  */
 #include <arpa/inet.h>
