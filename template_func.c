@@ -190,3 +190,23 @@ int fd_udp_client_open( void ) {
 
 	return client_socket;
 }
+
+/**
+ * Convert ip and port to struct sockaddr_in
+ */
+#include <arpa/inet.h>
+
+socklen_t fd_util_ip_and_port_to_sockaddr( struct sockaddr_in *addr,
+                                           const char *ip, uint16_t port ) {
+	int            ret;
+	struct in_addr address;
+
+	ret = inet_aton( ip, &address );
+	assert( ret != 0 && "ERROR: Can't parse ip address!" );
+
+	addr->sin_family = AF_INET;
+	addr->sin_port = htons( port );
+	addr->sin_addr.s_addr = address.s_addr;
+
+	return sizeof( struct sockaddr_in );
+}
