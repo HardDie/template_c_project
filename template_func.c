@@ -118,11 +118,11 @@ static void *server_thread_loop( void *arg ) {
 	int                     ret;
 	struct server_struct_t *server_struct = (struct server_struct_t *)arg;
 	int                     client_socket;
-	struct sockaddr_in      client_addr = {0};
-	socklen_t               client_length;
 
 	while ( 1 ) {
-		pthread_t client_thread = {0};
+		struct sockaddr_in client_addr = {0};
+		socklen_t          client_length;
+		pthread_t          client_thread = {0};
 
 		client_socket =
 		    accept( server_struct->server_socket,
