@@ -192,6 +192,31 @@ int fd_udp_client_open( void ) {
 }
 
 /**
+ * Recieve UDP message
+ */
+#include <arpa/inet.h>
+
+int fd_udp_recv_msg( int server_socket, char *recv_buf, int recv_len ) {
+	struct sockaddr_in client_struct = {0};
+	socklen_t          client_length;
+
+	return recvfrom( server_socket, recv_buf, recv_len, 0,
+	                 (struct sockaddr *)&client_struct, &client_length );
+}
+
+/**
+ * Send UDP message
+ */
+#include <arpa/inet.h>
+
+int fd_udp_send_msg( int client_socket, char *send_buf, int send_len,
+                     const struct sockaddr_in *server_struct ) {
+	return sendto( client_socket, send_buf, send_len, 0,
+	               (struct sockaddr *)server_struct,
+	               sizeof( struct sockaddr_in ) );
+}
+
+/**
  * Convert ip and port to struct sockaddr_in
  */
 #include <arpa/inet.h>
