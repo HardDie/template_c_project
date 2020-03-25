@@ -7,6 +7,9 @@
 
 extern int fd_tcp_server_open( uint16_t port );
 extern int fd_tcp_client_open( const char *ip, uint16_t port );
+extern int fd_tcp_wait_client( int socket );
+extern int fd_tcp_recv_msg( int socket, char *recv_buf, size_t recv_len );
+extern int fd_tcp_send_msg( int socket, char *send_buf, size_t send_len );
 extern pthread_t
             fd_tcp_server_register_handler( int server_socket,
                                             void *( *handler )( void *client_socket ) );

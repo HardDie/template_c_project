@@ -60,6 +60,36 @@ int fd_tcp_client_open( const char *ip, uint16_t port ) {
 }
 
 /**
+ * Wait connection new TCP client
+ */
+#include <arpa/inet.h>
+
+int fd_tcp_wait_client( int socket ) {
+	struct sockaddr_in client_addr = {0};
+	socklen_t          client_length;
+	return accept( socket, (struct sockaddr *)&client_addr,
+	               &client_length );
+}
+
+/**
+ * Recv TCP message
+ */
+#include <arpa/inet.h>
+
+int fd_tcp_recv_msg( int socket, char *recv_buf, size_t recv_len ) {
+	return recv( socket, recv_buf, recv_len, 0 );
+}
+
+/**
+ * Send TCP message
+ */
+#include <arpa/inet.h>
+
+int fd_tcp_send_msg( int socket, char *send_buf, size_t send_len ) {
+	return send( socket, send_buf, send_len, 0 );
+}
+
+/**
  * Register TCP packet handler
  */
 #include <arpa/inet.h>
