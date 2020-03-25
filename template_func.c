@@ -226,7 +226,7 @@ int fd_udp_client_open( void ) {
  */
 #include <arpa/inet.h>
 
-int fd_udp_recv_msg( int server_socket, char *recv_buf, int recv_len ) {
+int fd_udp_recv_msg( int server_socket, char *recv_buf, size_t recv_len ) {
 	struct sockaddr_in client_struct = {0};
 	socklen_t          client_length;
 
@@ -239,7 +239,7 @@ int fd_udp_recv_msg( int server_socket, char *recv_buf, int recv_len ) {
  */
 #include <arpa/inet.h>
 
-int fd_udp_send_msg( int client_socket, char *send_buf, int send_len,
+int fd_udp_send_msg( int client_socket, char *send_buf, size_t send_len,
                      const struct sockaddr_in *server_struct ) {
 	return sendto( client_socket, send_buf, send_len, 0,
 	               (struct sockaddr *)server_struct,
