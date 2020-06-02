@@ -8,7 +8,7 @@
 int fd_tcp_server_open( uint16_t port ) {
 	int                ret;
 	int                server_socket;
-	struct sockaddr_in server_addr = {0};
+	struct sockaddr_in server_addr = { 0 };
 	socklen_t          server_length;
 
 	server_addr.sin_family = AF_INET;
@@ -37,7 +37,7 @@ int fd_tcp_server_open( uint16_t port ) {
 int fd_tcp_client_open( const char *ip, uint16_t port ) {
 	int                ret;
 	int                client_socket;
-	struct sockaddr_in client_addr = {0};
+	struct sockaddr_in client_addr = { 0 };
 	socklen_t          client_length;
 	struct in_addr     server_address;
 
@@ -65,7 +65,7 @@ int fd_tcp_client_open( const char *ip, uint16_t port ) {
 #include <arpa/inet.h>
 
 int fd_tcp_wait_client( int socket ) {
-	struct sockaddr_in client_addr = {0};
+	struct sockaddr_in client_addr = { 0 };
 	socklen_t          client_length;
 	return accept( socket, (struct sockaddr *)&client_addr,
 	               &client_length );
@@ -120,9 +120,9 @@ static void *server_thread_loop( void *arg ) {
 	int                     client_socket;
 
 	while ( 1 ) {
-		struct sockaddr_in client_addr = {0};
+		struct sockaddr_in client_addr = { 0 };
 		socklen_t          client_length;
-		pthread_t          client_thread = {0};
+		pthread_t          client_thread = { 0 };
 
 		client_socket =
 		    accept( server_struct->server_socket,
@@ -189,7 +189,7 @@ void fd_tcp_server_unregister_handler( pthread_t server_thread ) {
 int fd_udp_server_open( uint16_t port ) {
 	int                ret;
 	int                server_socket;
-	struct sockaddr_in server_addr = {0};
+	struct sockaddr_in server_addr = { 0 };
 	socklen_t          server_length;
 
 	server_addr.sin_family = AF_INET;
@@ -227,7 +227,7 @@ int fd_udp_client_open( void ) {
 #include <arpa/inet.h>
 
 int fd_udp_recv_msg( int server_socket, char *recv_buf, size_t recv_len ) {
-	struct sockaddr_in client_struct = {0};
+	struct sockaddr_in client_struct = { 0 };
 	socklen_t          client_length;
 
 	return recvfrom( server_socket, recv_buf, recv_len, 0,
