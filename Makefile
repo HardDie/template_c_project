@@ -13,17 +13,19 @@ LIBTARGET = ${BINPATH}/libout
 EXT = c
 
 CFLAGS =
-CFLAGS += -pedantic
-CFLAGS += -Wall
-CFLAGS += -Wextra
-CFLAGS += -Wwrite-strings
-CFLAGS += -Werror
-CFLAGS += -MD
+
+# Warrnings
+CFLAGS += -Wall -Wextra -Wwrite-strings -Werror -Wshadow -Wpedantic -Wdouble-promotion -Wformat-security -Wformat-signedness -Wunsafe-loop-optimizations -Wunused-macros -Wbad-function-cast -Wcast-qual -Wcast-align -Wcast-align=strict -Wconversion -Warith-conversion -Wenum-compare -Wjump-misses-init -Wlogical-op -Waggregate-return -Wstrict-prototypes -Wold-style-definition -Wmissing-prototypes -Wmissing-declarations -Wpacked -Wredundant-decls -Wnested-externs -Winline -Winvalid-pch -Wstack-protector
+
+# Debug options
+CFLAGS += -g
+
+# Static analysers
+CFLAGS += -fanalyzer -Wanalyzer-too-complex -fdiagnostics-generate-patch -fdiagnostics-path-format=inline-events -fstack-protector -fsanitize=address -fno-omit-frame-pointer
+
+# Flag for shared library
 CFLAGS += -fPIC
 
-CFLAGS += -g
-CFLAGS += -fsanitize=address
-CFLAGS += -fno-omit-frame-pointer
 
 LDFLAGS =
 LDFLAGS += -pthread

@@ -1,5 +1,7 @@
 #include <assert.h>
 
+#include "template_func.h"
+
 /**
  * Open TCP socket
  */
@@ -76,7 +78,7 @@ int fd_tcp_wait_client( int socket ) {
  */
 #include <arpa/inet.h>
 
-int fd_tcp_recv_msg( int socket, char *recv_buf, size_t recv_len ) {
+ssize_t fd_tcp_recv_msg( int socket, char *recv_buf, size_t recv_len ) {
 	return recv( socket, recv_buf, recv_len, 0 );
 }
 
@@ -85,7 +87,7 @@ int fd_tcp_recv_msg( int socket, char *recv_buf, size_t recv_len ) {
  */
 #include <arpa/inet.h>
 
-int fd_tcp_send_msg( int socket, char *send_buf, size_t send_len ) {
+ssize_t fd_tcp_send_msg( int socket, char *send_buf, size_t send_len ) {
 	return send( socket, send_buf, send_len, 0 );
 }
 
@@ -226,7 +228,7 @@ int fd_udp_client_open( void ) {
  */
 #include <arpa/inet.h>
 
-int fd_udp_recv_msg( int server_socket, char *recv_buf, size_t recv_len ) {
+ssize_t fd_udp_recv_msg( int server_socket, char *recv_buf, size_t recv_len ) {
 	struct sockaddr_in client_struct = { 0 };
 	socklen_t          client_length;
 
@@ -239,10 +241,10 @@ int fd_udp_recv_msg( int server_socket, char *recv_buf, size_t recv_len ) {
  */
 #include <arpa/inet.h>
 
-int fd_udp_send_msg( int client_socket, char *send_buf, size_t send_len,
-                     const struct sockaddr_in *server_struct ) {
+ssize_t fd_udp_send_msg( int client_socket, char *send_buf, size_t send_len,
+                         const struct sockaddr_in *server_struct ) {
 	return sendto( client_socket, send_buf, send_len, 0,
-	               (struct sockaddr *)server_struct,
+	               (const struct sockaddr *)server_struct,
 	               sizeof( struct sockaddr_in ) );
 }
 
