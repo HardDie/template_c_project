@@ -55,7 +55,7 @@ ${BINDIR}/lib${TARGET}.so : ${OBJ}
 
 # Compile object files
 ${BINDIR}/%.o : ${SRCDIR}/%.${EXT}
-	@ if [ ! -d ${BINDIR} ]; then mkdir ${BINDIR}; fi
+	@mkdir -p ${BINDIR}
 	${QUIET_CC}${CC} -c $< -o $@ ${CFLAGS}
 
 
