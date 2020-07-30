@@ -11,8 +11,7 @@ EXT = c
 
 BINDIR = bin
 SRCDIR = src
-TARGET = ${BINDIR}/out
-LIBTARGET = ${BINDIR}/libout
+TARGET = out
 
 
 # Init empty
@@ -40,18 +39,18 @@ SRC ?= $(wildcard ${SRCDIR}/*.${EXT})
 OBJ ?= $(SRC:${SRCDIR}/%.${EXT}=${BINDIR}/%.o)
 
 # Compile binary file
-all : ${TARGET}
-${TARGET} : ${OBJ}
+all : ${BINDIR}/${TARGET}
+${BINDIR}/${TARGET} : ${OBJ}
 	${QUIET_BUILT_IN}${CC} $^ -o $@ ${CFLAGS} ${LDFLAGS}
 
 # Compile static library
-lib : ${LIBTARGET}.a
-${LIBTARGET}.a : ${OBJ}
+lib : ${BINDIR}/lib${TARGET}.a
+${BINDIR}/lib${TARGET}.a : ${OBJ}
 	${QUIET_AR}${AR} rcs $@ $^
 
 # Compile shared library
-so : ${LIBTARGET}.so
-${LIBTARGET}.so : ${OBJ}
+so : ${BINDIR}/lib${TARGET}.so
+${BINDIR}/lib${TARGET}.so : ${OBJ}
 	${QUIET_BUILT_IN}${CC} -shared $^ -o $@ ${CFLAGS} ${LDFLAGS}
 
 # Compile object files
