@@ -7,12 +7,17 @@ endif
 
 CC = gcc
 AR = ar
-BINPATH = bin
-TARGET = ${BINPATH}/out
-LIBTARGET = ${BINPATH}/libout
 EXT = c
 
+BINDIR = bin
+SRCDIR = src
+TARGET = ${BINDIR}/out
+LIBTARGET = ${BINDIR}/libout
+
+
+# Init empty
 CFLAGS =
+LDFLAGS =
 
 # Warrnings
 CFLAGS += -Wall -Wextra -Wwrite-strings -Werror -Wshadow -Wpedantic -Wdouble-promotion -Wformat-security -Wformat-signedness -Wunsafe-loop-optimizations -Wunused-macros -Wbad-function-cast -Wcast-qual -Wcast-align -Wcast-align=strict -Wconversion -Warith-conversion -Wenum-compare -Wjump-misses-init -Wlogical-op -Waggregate-return -Wstrict-prototypes -Wold-style-definition -Wmissing-prototypes -Wmissing-declarations -Wpacked -Wredundant-decls -Wnested-externs -Winline -Winvalid-pch -Wstack-protector
@@ -26,12 +31,13 @@ CFLAGS += -fanalyzer -Wanalyzer-too-complex -fdiagnostics-generate-patch -fdiagn
 # Flag for shared library
 CFLAGS += -fPIC
 
+# include directory
+CFLAGS += -I./include
 
-LDFLAGS =
 LDFLAGS += -pthread
 
-SRC ?= $(wildcard *.${EXT})
-OBJ ?= $(SRC:%.${EXT}=${BINPATH}/%.o)
+SRC ?= $(wildcard ${SRCDIR}/*.${EXT})
+OBJ ?= $(SRC:${SRCDIR}/%.${EXT}=${BINDIR}/%.o)
 
 # Compile binary file
 all : ${TARGET}
@@ -49,12 +55,12 @@ ${LIBTARGET}.so : ${OBJ}
 	${QUIET_BUILT_IN}${CC} -shared $^ -o $@ ${CFLAGS} ${LDFLAGS}
 
 # Compile object files
-${BINPATH}/%.o : %.${EXT}
-	@ if [ ! -d ${BINPATH} ]; then mkdir ${BINPATH}; fi
+${BINDIR}/%.o : ${SRCDIR}/%.${EXT}
+	@ if [ ! -d ${BINDIR} ]; then mkdir ${BINDIR}; fi
 	${QUIET_CC}${CC} -c $< -o $@ ${CFLAGS}
 
 
-clean : ${BINPATH}
+clean : ${BINDIR}
 	${QUIET_CLEAN}rm -rf $<
 
 -include $(OBJ:%.o=%.h)
