@@ -58,8 +58,13 @@ ${BINDIR}/%.o : ${SRCDIR}/%.${EXT}
 	@mkdir -p ${BINDIR}
 	${QUIET_CC}${CC} -c $< -o $@ ${CFLAGS}
 
+.PHONY: tests
+tests :
+	make -C tests
 
+.PHONY: clean
 clean : ${BINDIR}
 	${QUIET_CLEAN}rm -rf $<
+	@make -C tests clean
 
 -include $(OBJ:%.o=%.h)
