@@ -22,6 +22,8 @@ CFLAGS += -Igoogletest/googletest/include
 CFLAGS += -Igoogletest/googletest
 
 SRC ?= $(wildcard ${SRCDIR}/*.${EXT})
+# Remove gtest-all.cc file because otherwise we will get a compilation error
+SRC := $(filter-out ${SRCDIR}/gtest-all.cc,${SRC})
 OBJ ?= $(SRC:${SRCDIR}/%.${EXT}=${BINDIR}/%.o)
 
 all : lib
